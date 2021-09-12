@@ -43,7 +43,7 @@ public class Camera: NSObject {
         }
     }
     
-    func capture(_ view: UIView) {
+    public func capture(_ view: UIView) {
         access { [weak self] in
             guard let self = self else { return }
             self.sessionQueue.async {
@@ -64,12 +64,12 @@ public class Camera: NSObject {
     }
     
     @discardableResult
-    func delegate(_ delegate: CameraProtocol?) -> Self {
+    public func delegate(_ delegate: CameraProtocol?) -> Self {
         self.delegate = delegate
         return self
     }
     
-    func rotate() {
+    public func rotate() {
         guard let frame = preview?.superlayer?.bounds,
               let connection = preview?.connection else { return }
         let orientation: UIDeviceOrientation = UIDevice.current.orientation
@@ -85,7 +85,7 @@ public class Camera: NSObject {
         preview?.frame = frame
     }
     
-    func image() {
+    public func image() {
         takePicture = true
     }
     
@@ -134,13 +134,13 @@ public class Camera: NSObject {
         session.stopRunning()
     }
     
-    func switchCamera(_ view: UIView?) {
+    public func switchCamera(_ view: UIView?) {
         view?.isUserInteractionEnabled = false
         switchCamera()
         view?.isUserInteractionEnabled = true
     }
     
-    func switchCamera() {
+    public func switchCamera() {
         session.beginConfiguration()
         type.toggle()
         switch type {
@@ -178,7 +178,7 @@ public class Camera: NSObject {
         configureZoomScale()
     }
     
-    func attachFocus(_ view: UIView) {
+    private func attachFocus(_ view: UIView) {
         DispatchQueue.main.async {
             self.focusGesture.addTarget(self, action: #selector(self.configureFocus))
             view.addGestureRecognizer(self.focusGesture)
